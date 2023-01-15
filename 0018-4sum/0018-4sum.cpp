@@ -1,76 +1,41 @@
-class Solution {
-public:
-    vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        vector<vector<int>> res;
-        
-        if(nums.empty())
-            return res;
-        
-        int n = nums.size();
-        
-        // Approach requires sorting and 2-pointer approach
-        
-        // Step1 -> sorting
-        sort(nums.begin(),nums.end());
-        
-        
-        // Step2 -> 2-pointer 
-        for(int i=0; i<n; i++)
+class Solution
+{
+    public:
+        vector<vector < int>> fourSum(vector<int> &nums, int target)
         {
-            long long int target3 = target - nums[i];
-            
-            for(int j=i+1; j<n; j++)
+            vector<vector < int>> ans;
+            if (nums.empty()) return ans;
+            sort(nums.begin(), nums.end());
+            int n = nums.size();
+            for (int i = 0; i < n; i++)
             {
-                long long int target2 = target3 - nums[j];
-                
-                int front = j+1;
-                int back = n-1;
-                
-                while(front<back)
+                long long int target2 = target - nums[i];
+                for (int j = i + 1; j < n; j++)
                 {
-                    // remaining elements to be found for quad sum
-                    int two_sum = nums[front] + nums[back];
-                    
-                    if(two_sum < target2)
-                        front++;
-                    else if(two_sum > target2)
-                        back--;
-                    
-                    else
+                    long long int rem = target2 - nums[j];
+                    int left = j + 1;
+                    int right = n - 1;
+                    while (left < right)
                     {
-                        // if two_sum == target2
-                        vector<int> quad(4,0);
-                        // quad.push_back(nums[i]);
-                        // quad.push_back(nums[j]);
-                        // quad.push_back(nums[front]);
-                        // quad.push_back(nums[back]);
-                        quad[0] = nums[i];
-                        quad[1] = nums[j];
-                        quad[2] = nums[front];
-                        quad[3] = nums[back];
-                        
-                        
-                        res.push_back(quad);
-                        
-                        // Processing the duplicates of number 3
-                        while(front < back && nums[front] == quad[2]) 
-                            front++;
-                        
-                        // Processing the duplicates of number 4
-                        while(front < back && nums[back] == quad[3]) 
-                            back--;
+                        long long int two_sum = nums[left] + nums[right];
+                        if (two_sum < rem) left++;
+                        else if (two_sum > rem) right--;
+                        else
+                        {
+                            vector<int> temp(4, 0);
+                            temp[0] = nums[i];
+                            temp[1] = nums[j];
+                            temp[2] = nums[left];
+                            temp[3] = nums[right];
+                            ans.push_back(temp);
+                            while (left < right && nums[left] == temp[2]) left++;
+                            while (left < right && nums[right] == temp[3]) right--;
+                        }
                     }
-                    
+                    while (j < n - 1 && nums[j] == nums[j + 1]) j++;
+                    while (i < n - 1 && nums[i] == nums[i + 1]) i++;
                 }
-                // Processing the duplicates of number 2
-                    while(j + 1 < n && nums[j + 1] == nums[j]) 
-                        j++;
             }
-            // Processing the duplicates of number 2
-                    while(i + 1 < n && nums[i + 1] == nums[i]) 
-                        i++;
+            return ans;
         }
-        
-        return res;
-    }
 };
