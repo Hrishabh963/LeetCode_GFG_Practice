@@ -8,22 +8,38 @@ class Solution {
   public:
     vector<int> max_of_subarrays(vector<int> arr, int n, int k) {
         // your code here
-        vector<int> nge(n,1e9);
-        stack<int> st;
-        st.push(n-1);
-        for(int i = n-2; i>=0; i--){
-            while(!st.empty() && arr[st.top()]<arr[i])st.pop();
-            if(!st.empty()) nge[i] = st.top();
-            st.push(i);
-        }
-        vector<int> ans(n-k+1);
+        // Stack Approach:
+        // vector<int> nge(n,1e9);
+        // stack<int> st;
+        // st.push(n-1);
+        // for(int i = n-2; i>=0; i--){
+        //     while(!st.empty() && arr[st.top()]<arr[i])st.pop();
+        //     if(!st.empty()) nge[i] = st.top();
+        //     st.push(i);
+        // }
+        // vector<int> ans(n-k+1);
+        // int j = 0;
+        // for(int i = 0; i<=n-k; i++){
+        //     if(j<i) j= i;
+        //     while(nge[j]< i+k){
+        //         j = nge[j];
+        //     }
+        //     ans[i] = arr[j];
+        // }
+        // return ans;
+        
+        //Deque Approach:
+        deque<int> dq;
         int j = 0;
-        for(int i = 0; i<=n-k; i++){
-            if(j<i) j= i;
-            while(nge[j]< i+k){
-                j = nge[j];
-            }
-            ans[i] = arr[j];
+        vector<int> ans(n-k+1);
+        for(int i = 0; i<n; i++){
+            if(!dq.empty() && dq.front() == i-k)dq.pop_front();
+            while(!dq.empty() && arr[dq.back()]<arr[i])dq.pop_back();
+            dq.push_back(i);
+            if(i>=k-1){
+                ans[j] = arr[dq.front()];
+                j++;
+            } 
         }
         return ans;
     }
