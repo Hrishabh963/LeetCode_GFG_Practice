@@ -24,7 +24,8 @@ public:
             }
         }
         curr = 1;
-         for(int i = nums.size()-1; i>=0; i--){
+        //Traverse again from backwards to check for a subarray before a 0 or negative integer for ex [3,-1,4]
+        for(int i = nums.size()-1; i>=0; i--){
             curr*= nums[i];
             if(curr>maxi){
                 maxi = max(maxi,curr);
