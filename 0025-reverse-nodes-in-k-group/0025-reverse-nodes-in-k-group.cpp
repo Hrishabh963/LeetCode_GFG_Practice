@@ -1,37 +1,41 @@
 /**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
+ *Definition for singly-linked list.
+ *struct ListNode {
+ *   int val;
+ *   ListNode * next;
+ *   ListNode() : val(0), next(nullptr) {}
+ *   ListNode(int x) : val(x), next(nullptr) {}
+ *   ListNode(int x, ListNode *next) : val(x), next(next) {}
+ *};
  */
-class Solution {
-public:
-    ListNode* reverseKGroup(ListNode* head, int k) {
-        if(!head || k==1) return head;
-        ListNode* dummy = new ListNode(0);
-        dummy->next = head;
-        ListNode* pre = dummy, *curr = dummy, *nex = dummy;
-        int count = 0;
-        while(curr->next !=NULL){
-            curr = curr->next;
-            count++;
-        }
-        while(count>=k){
-            curr = pre->next;
-            nex = curr->next;
-            for(int i = 0; i<k-1; i++){
-                curr->next = nex->next;
-                nex->next  = pre->next;
-                pre->next = nex;
-                nex = curr->next;
+class Solution
+{
+    public:
+        ListNode* reverseKGroup(ListNode *head, int k)
+        {
+            int x = k;
+            ListNode *p = head;
+            while (x > 0 && p)
+            {
+                p = p->next;
+                x--;
             }
-            count-=k;
-            pre = curr;
+            if (x == 0)
+            {
+                ListNode *pre = NULL, *next = NULL, *curr = head;
+                while (curr != p)
+                {
+                    next = curr->next;
+                    curr->next = pre;
+                    pre = curr;
+                    curr = next;
+                }
+                head->next = reverseKGroup(p, k);
+                return head = pre;
+            }
+            else
+            {
+                return head;
+            }
         }
-        return dummy->next;
-    }
 };
