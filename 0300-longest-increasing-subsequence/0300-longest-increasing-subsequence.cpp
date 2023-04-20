@@ -1,26 +1,27 @@
 class Solution {
 public:
-    int rec(vector<int> &arr,int curr,int prev,vector<vector<int>> &dp){
-        if(curr == arr.size()) return 0;
-        if(dp[curr][prev+1]!=-1) return dp[curr][prev+1];
-        int len = 0 + rec(arr,curr+1,prev,dp);
-        if(prev == -1 || arr[curr]>arr[prev]){
-            len = max(len,1 + rec(arr,curr+1,curr,dp));
-        }
-        return dp[curr][prev+1] = len;
+    
+    int f(vector<int> &nums,int prev,int i){
+        if(i==nums.size())return 0;
+        int notTake = f(nums,prev,i+1);
+        int take = 0;
+        if(prev==-1 || nums[i]>nums[prev])
+            take = 1 + f(nums,i,i+1);
+        return max(notTake,take);
     }
+    
     int lengthOfLIS(vector<int>& nums) {
-        vector<vector<int>> dp(nums.size()+1,vector<int>(nums.size()+1,0));
         int n = nums.size();
+        vector<vector<int>> dp(nums.size()+1,vector<int>(nums.size()+1,0));
         for(int i = n-1; i>=0; i--){
-            for(int j = i-1; j>=-1; j--){
-                int len  = 0  + dp[i+1][j+1];
-                if(j == -1 || nums[i]>nums[j]){
-                    len = max(len, 1 + dp[i+1][i+1]);
-                }
-                dp[i][j+1] = len;
+            for(int prev = i-1; prev>=-1; prev--){
+                 int notTake = dp[i+1][prev+1];
+                 int take = 0;
+                 if(prev==-1 || nums[i]>nums[prev])
+                    take = 1 + dp[i+1][i+1];
+                 dp[i][prev+1] = max(notTake,take);
             }
         }
-        return dp[0][0];
+        return dp[0][-1+1];
     }
 };
